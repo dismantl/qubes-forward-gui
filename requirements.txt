@@ -1,0 +1,7 @@
+loguru==0.7.3
+peewee==3.17.8
+PyQt6==6.8.0
+PyQt6-Qt6==6.8.1
+PyQt6_sip==13.9.1
+nuitka
+pyinstaller

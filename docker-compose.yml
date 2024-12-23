@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      context: ./
+    volumes:
+      - ./:/app
+    command: "/app/docker/buildapp.sh"

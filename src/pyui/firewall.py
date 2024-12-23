@@ -39,9 +39,11 @@ class Ui_Form(object):
         self.label_2 = QtWidgets.QLabel(parent=self.groupBox)
         self.label_2.setObjectName("label_2")
         self.verticalLayout_3.addWidget(self.label_2)
-        self.lineEdit = QtWidgets.QLineEdit(parent=self.groupBox)
-        self.lineEdit.setObjectName("lineEdit")
-        self.verticalLayout_3.addWidget(self.lineEdit)
+        self.spinBox = QtWidgets.QSpinBox(parent=self.groupBox)
+        self.spinBox.setMinimum(1)
+        self.spinBox.setMaximum(65535)
+        self.spinBox.setObjectName("spinBox")
+        self.verticalLayout_3.addWidget(self.spinBox)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout_4.addLayout(self.verticalLayout)
@@ -66,7 +68,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Open port"))
         self.groupBox.setTitle(_translate("Form", "Firewall open port"))
         self.label.setText(_translate("Form", "Qube"))
         self.comboBox.setItemText(0, _translate("Form", "item1"))

@@ -1,0 +1,1 @@
+QUBES_FORWARD_GUI_DEV=True python3 src/main.py $@

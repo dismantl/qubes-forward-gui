@@ -43,7 +43,7 @@ class Ui_Form(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.tableWidget = QtWidgets.QTableWidget(parent=self.tab)
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(4)
+        self.tableWidget.setColumnCount(6)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -53,6 +53,15 @@ class Ui_Form(object):
         self.tableWidget.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, item)
+        self.tableWidget.horizontalHeader().setVisible(True)
+        self.tableWidget.horizontalHeader().setCascadingSectionResizes(True)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(100)
+        self.tableWidget.horizontalHeader().setHighlightSections(True)
+        self.tableWidget.horizontalHeader().setMinimumSectionSize(10)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout.addWidget(self.tableWidget)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -82,12 +91,14 @@ class Ui_Form(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.tableWidget_2 = QtWidgets.QTableWidget(parent=self.tab_2)
         self.tableWidget_2.setObjectName("tableWidget_2")
-        self.tableWidget_2.setColumnCount(2)
+        self.tableWidget_2.setColumnCount(3)
         self.tableWidget_2.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(2, item)
         self.tableWidget_2.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout_2.addWidget(self.tableWidget_2)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -130,23 +141,29 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Qubes Forward"))
         self.tableWidget.setSortingEnabled(True)
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("Form", "From Qube"))
+        item.setText(_translate("Form", " "))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("Form", "From Port"))
+        item.setText(_translate("Form", "From Qube"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("Form", "To Qube"))
+        item.setText(_translate("Form", "From Port"))
         item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("Form", "To Qube"))
+        item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("Form", "To Port"))
+        item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("Form", "pid"))
         self.PortForwarding_Refresh.setText(_translate("Form", "Refresh"))
         self.PortForwarding_New.setText(_translate("Form", "New"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Form", "Port forwarding"))
         self.tableWidget_2.setSortingEnabled(True)
         item = self.tableWidget_2.horizontalHeaderItem(0)
-        item.setText(_translate("Form", "Qube"))
+        item.setText(_translate("Form", " "))
         item = self.tableWidget_2.horizontalHeaderItem(1)
+        item.setText(_translate("Form", "Qube"))
+        item = self.tableWidget_2.horizontalHeaderItem(2)
         item.setText(_translate("Form", "Port"))
         self.Firewall_Refresh.setText(_translate("Form", "Refresh"))
         self.Firewall_New.setText(_translate("Form", "New"))
@@ -155,13 +172,14 @@ class Ui_Form(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sources available here <a href=\"https://github.com/r3t4k3r/qubes-forward-gui\"><span style=\" text-decoration: underline; color:#0000ff;\">https://github.com/r3t4k3r/qubes-forward-gui</span></a><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sources available here: <span style=\" font-family:\'monospace\';\">https://github.com/r3t4k3r/qubes-forward-gui</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you want to support me:</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\"><span style=\" font-weight:600;\">ETH</span> - <span style=\" font-family:\'monospace\';\">0xa8C72e40D17671695Eaf5D7A5aE5a965CB52F28</span> </p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\"><span style=\" font-weight:600;\">BTC</span> - <span style=\" font-family:\'monospace\';\">bc1qcqq5vu98g5zjds6e7c4j4af5v0zyg0z4qmlzu3</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\"><span style=\" font-weight:600;\">USDT TRC20</span> - <span style=\" font-family:\'monospace\';\">TQa4HEayA7JpjTNCfReQ4zXBDevk9TRYor</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\"><span style=\" font-weight:600;\">LTC</span> - <span style=\" font-family:\'monospace\';\">ltc1qwhakmnj7mu9wry4u5lkzujf99g9h825fqp4730</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Made with ❤️ by <a href=\"https://github.com/r3t4k3r\"><span style=\" text-decoration: underline; color:#0000ff;\">@r3t4k3r</span></a></p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Made with ❤️ by r3t4k3r</p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Form", "About"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("Form", "Usage"))
