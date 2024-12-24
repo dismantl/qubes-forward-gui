@@ -12,11 +12,12 @@ args = parser.parse_args()
 logger.remove()
 
 mylogger = logger
-mylogger.add(sys.stdout, level="DEBUG")
+
 mylogger.add(sys.stdout, level="WARNING")
 mylogger.add(sys.stdout, level="INFO")
+mylogger.add(sys.stdout, level="ERROR")
 if args.debug:
-    mylogger.add(sys.stdout, level="ERROR")
+    mylogger.add(sys.stdout, level="DEBUG")
 
 
 @dataclass
