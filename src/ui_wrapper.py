@@ -26,6 +26,7 @@ class Index:
 
         # show rules
         self.on_port_forward_refresh()
+        self.on_firewall_refresh()
 
     def on_port_forward_new(self):
         config.logger.debug("port forward new")
@@ -63,10 +64,29 @@ class Index:
         dialog = widgets.QDialog()
         Firewall(dialog)
         dialog.exec()
+        self.on_firewall_refresh()
 
     def on_firewall_refresh(self):
         config.logger.debug("firewall refresh")
-        utils.get_qubes()
+        rules = utils.get_firewall_rules()
+        
+        self.ui.tableWidget_2.setRowCount(0)
+        for row, rule in enumerate(rules):
+            config.logger.debug(f"firewall rule {rule.id}: {rule.qube}:{rule.port}")
+            self.ui.tableWidget_2.insertRow(row)
+            
+            delete_button = widgets.QPushButton("D")
+            delete_button.clicked.connect(lambda _, row=row, rule_id=rule.id: self.on_firewall_rule_delete(row, rule_id))
+            
+            self.ui.tableWidget_2.setCellWidget(row, 0, delete_button)
+            self.ui.tableWidget_2.setItem(row, 1, widgets.QTableWidgetItem(rule.qube))
+            self.ui.tableWidget_2.setItem(row, 2, widgets.QTableWidgetItem(str(rule.port)))
+
+    def on_firewall_rule_delete(self, row: int, rule_id: int):
+        config.logger.debug(f"delete rule {rule_id}")
+        self.ui.tableWidget.removeRow(row)
+        utils.delete_firewall_rule(rule_id)
+        self.on_firewall_refresh()
 
 class Forward:
     def __init__(self, item: widgets.QDialog):
@@ -102,7 +122,7 @@ class Forward:
         to_port = self.ui.spinBox_2.text()
         
         config.logger.debug(f"add {from_qube}:{from_port} => {to_qube}:{to_port}")
-        rule = utils.add_forward_rule(from_qube, int(from_port), to_qube, to_port)
+        utils.add_forward_rule(from_qube, int(from_port), to_qube, to_port)
         self.item.done(1)
 
 class Firewall:
@@ -123,12 +143,12 @@ class Firewall:
         self.ui.add.clicked.connect(self.on_add)
 
     def on_cancel(self):
-        config.logger.debug("cancel")
+        config.logger.debug("firewall cancel")
         self.item.reject()
 
     def on_add(self):
         qube = self.ui.comboBox.currentText()
         port = self.ui.spinBox.text()
-        config.logger.debug(f"open port {qube}:{port}")
-
+        config.logger.debug(f"firewall open port {qube}:{port}")
+        utils.add_firewall_rule(qube, int(port))
         self.item.done(1)

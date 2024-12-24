@@ -27,21 +27,39 @@ class Port:
     peer_port: str
     process: None | int
 
-def get_qubes() -> list[Qube]:
+@dataclass
+class ShellResponse:
+    command: list[str]
+    stdout: str
+    stderr: str
+
+def dom0_shell(command: list[str]) -> ShellResponse:
+    # fix pyinstaller bug
     if os.environ.get('PYTHONHOME'):
         del os.environ['PYTHONHOME']
+
+    config.logger.debug(f"dom0 executing {command}")
+    stdout, stderr = Popen(command, stdout=PIPE, stderr=PIPE).communicate()
+    stdout = stdout.decode().strip()
+    stderr = stderr.decode().strip()
+    config.logger.debug(f"dom0: {command} stdout:\n{stdout}")
+    config.logger.debug(f"dom0: {command} stderr:\n{stderr}")
+    return ShellResponse(command, stdout, stderr)
+
+def execute_or_read(file: str, command: list[str]) -> str:
     if config.dev:
-        with open('assets/qvm-ls.txt', 'r') as f:
+        config.logger.debug(f"dev mode enabled, reading: {file}")
+        with open(file, 'r') as f:
             text = f.read()
-    else:
-        config.logger.debug("dom0 executing `qvm-ls`")
-        stdout, stderr = Popen(["qvm-ls"], stdout=PIPE, stderr=PIPE).communicate()
-        config.logger.debug(f"dom0: `qvm-ls` stdout:\n{stdout.decode()}")
-        config.logger.debug(f"dom0: `qvm-ls` stderr:\n{stderr.decode()}")
-        text = stdout.decode()
+        config.logger.debug(f"file content:\n{text}")
+        return text
+    
+    return dom0_shell(command).stdout
+
+def get_qubes() -> list[Qube]:
+    text = execute_or_read('assets/qvm-ls.txt', ["qvm-ls"])
     
     qubes: list[Qube] = []
-    text = text.strip()
     text = re.sub(' +', ' ', text)
     for i, line in enumerate(text.split('\n')):
         if i == 0:
@@ -65,8 +83,6 @@ def get_qubes_running() -> list[Qube]:
     return running
 
 def add_forward_rule(from_qube: str, from_port: int, to_qube: str, to_port: int) -> database.ForwardRule:
-    if os.environ.get('PYTHONHOME'):
-        del os.environ['PYTHONHOME']
     rule: database.ForwardRule = database.ForwardRule.create(
         from_qube=from_qube, 
         from_port=from_port, 
@@ -76,33 +92,19 @@ def add_forward_rule(from_qube: str, from_port: int, to_qube: str, to_port: int)
     if config.dev:
         config.logger.debug("config.dev enabled, command didn't executed")
     else:
-        command = f"qvm-run -u root --pass-io {to_qube} qvm-connect-tcp {to_port}:{from_qube}:{from_port}"
-        config.logger.debug(f"dom0 executing `{command}`")
-        stdout, stderr = Popen(["timeout", "2",
-            "qvm-run", "-u", "root", "--pass-io", to_qube, 
-            f"qvm-connect-tcp {to_port}:{from_qube}:{from_port}"
-            ], stdout=PIPE, stderr=PIPE).communicate()
-
-        config.logger.debug(f"dom0 command `{command}` stdout:\n{stdout.decode()}")
-        config.logger.debug(f"dom0 command `{command}` stdout:\n{stderr.decode()}")
+        dom0_shell([
+            "timeout", "2",
+            "qvm-run", "-u", "root", "--pass-io", to_qube, f"qvm-connect-tcp {to_port}:{from_qube}:{from_port}"
+        ])
     return rule
 
 def get_open_ports(qube: str) -> list[Port]:
-    if os.environ.get('PYTHONHOME'):
-        del os.environ['PYTHONHOME']
-    if config.dev:
-        with open('assets/ss-tlpn.txt', 'r') as f:
-            text = f.read()
-        config.logger.debug(text)            
-    else:
-        config.logger.debug(f"dom0 execute `qvm-run -u root --pass-io {qube} 'ss -tlpn'`")
-        stdout, stderr = Popen(["qvm-run", "-u", "root", "--pass-io", qube, "ss -tlpn"], stdout=PIPE, stderr=PIPE).communicate()
-        config.logger.debug(f"dom0 command stdout:\n{stdout.decode()}")
-        config.logger.debug(f"dom0 command stderr:\n{stderr.decode()}")
-        text = stdout.decode()
+    text = execute_or_read(
+        'assets/ss-tlpn.txt', 
+        ["qvm-run", "-u", "root", "--pass-io", qube, "ss -tlpn"]
+    )
         
     ports: list[Port] = []
-    text = text.strip()
     text = re.sub(' +', ' ', text)
     for i, line in enumerate(text.split('\n')):
         if i == 0:
@@ -149,6 +151,7 @@ def get_forward_rules() -> list[database.ForwardRule]:
     
     qube_to_port: str[list[Port]] = {}
     filtered_qubes_names = list(set([r.to_qube for r in filtered_rules]))
+    
     with ProcessPoolExecutor() as executor:
         results = list(executor.map(get_open_ports, filtered_qubes_names))
         config.logger.debug(f"pool results: {results}")
@@ -157,7 +160,6 @@ def get_forward_rules() -> list[database.ForwardRule]:
         qube_to_port[qube_name] = results[i]
     
     config.logger.debug(f"qube_to_port: {qube_to_port}")
-    
     for rule in filtered_rules:
         ports: list[Port] = qube_to_port[rule.to_qube]
         for port in ports:
@@ -176,14 +178,93 @@ def get_forward_rules() -> list[database.ForwardRule]:
     return valid_rules
 
 def delete_forward_rule(rule_id: int):
-    if os.environ.get('PYTHONHOME'):
-        del os.environ['PYTHONHOME']
     rule: database.ForwardRule = database.ForwardRule.get_by_id(rule_id)
     if not config.dev:
-        config.logger.debug(f"dom0 cmd: qvm-run -u root {rule.to_qube} 'kill {rule.pid}'")
-        stdout, stderr = Popen(["qvm-run", "-u", "root", rule.to_qube, f"kill {rule.pid}"], stdout=PIPE, stderr=PIPE).communicate()
-        config.logger.debug(f"dom0 command stdout:\n{stdout.decode()}")
-        config.logger.debug(f"dom0 command stderr:\n{stderr.decode()}")
+        dom0_shell(["qvm-run", "-u", "root", rule.to_qube, f"kill {rule.pid}"])
+    rule.delete_instance()
+
+@dataclass
+class NftRule:
+    proto: str
+    port: int
+    action: str
+
+def get_nft_rules(qube: str) -> list[NftRule]:
+    config.logger.debug(f"get nft rules for qube {qube}")
+    text = execute_or_read(
+        'assets/nft-chain.txt', 
+        ["qvm-run", "-u", "root", "--pass-io", qube, "nft list chain ip qubes custom-input"]
+    )
+    rules: list[NftRule] = []
+    text = text.replace('\t', '')
+    lines = text.split('\n')
+    for i, line in enumerate(lines):
+        # skip first and last 2 lines
+        if i in [0, 1, len(lines)-1, len(lines)-2]:
+            pass
+        parts = line.split(' ')
+        if len(parts) != 7:
+            continue
+        try: rules.append(NftRule(
+                proto=parts[3],
+                port=int(parts[5]),
+                action=parts[6]
+            ))
+        except: pass
+    config.logger.debug(f"nft rules in {qube}: {rules}")
+    return rules
+
+def get_firewall_rules() -> list[database.FirewallRule]:
+    rules_db: list[database.FirewallRule] = database.FirewallRule.select()
+    running_qubes = get_qubes_running()
+    running_qubes_names = [q.name for q in running_qubes]
+    for rule in rules_db:
+        if rule.qube not in running_qubes_names:
+            config.logger.warning(f"qube {rule.qube} is shutdown, deleting rule from database")
+            rule.delete_instance()   
+ 
+    rules_db: list[database.FirewallRule] = database.FirewallRule.select()
+    uniq_qubes_names = list(set([r.qube for r in rules_db]))
+    qube_to_nft: str[list[NftRule]] = {}
+
+    with ProcessPoolExecutor() as executor:
+        config.logger.debug(f"uniq_qubes_names: {uniq_qubes_names}")
+        results = list(executor.map(get_nft_rules, uniq_qubes_names))
+        config.logger.debug(f"pool results: {results}")
+
+    for i, qube_name in enumerate(uniq_qubes_names):
+        qube_to_nft[qube_name] = results[i]
+    
+    valid_rules: list[database.FirewallRule] = []
+    for rule in rules_db:
+        nft_rules: list[NftRule] = qube_to_nft[rule.qube]
+        for nft_rule in nft_rules:
+            if rule.port == nft_rule.port and nft_rule.action == 'accept':
+                valid_rules.append(rule)
+
+    config.logger.debug(f'valid firewall rules: {valid_rules}')
+    return valid_rules
+
+def add_firewall_rule(qube: str, port: int) -> database.FirewallRule:
+    rule = database.FirewallRule.create(qube=qube, port=port)
+    if config.dev:
+        config.logger.warning(f'config.dev enabled, skipping add firewall rule {qube}:{port}')
+    else:
+        dom0_shell([
+            "qvm-run", "-u", "root", "--pass-io", qube, 
+            f"nft add rule ip qubes custom-input meta l4proto tcp ct state new,established tcp dport {port} accept"
+        ])
+    return rule
+
+def delete_firewall_rule(rule_id: int):
+    rule: database.FirewallRule = database.FirewallRule.get_by_id(rule_id)
+    if config.dev:
+        config.logger.warning(f'config.dev enabled, skipping delete firewall rule {rule.qube}:{rule.port}')
+    else:
+        dom0_shell([
+            "qvm-run", "-u", "root", "--pass-io", rule.qube, 
+            f"nft flush chain ip qubes custom-input"
+        ])
     rule.delete_instance()
 
 if __name__ == '__main__':
@@ -191,4 +272,4 @@ if __name__ == '__main__':
     config.dev = True
     config.logger.add(sys.stdout, level="DEBUG")
 
-    get_forward_rules()
+    get_nft_rules("personal")

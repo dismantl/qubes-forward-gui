@@ -18,4 +18,11 @@ class ForwardRule(BaseModel):
     def __str__(self):
         return f"{self.from_qube}:{self.from_port}@{self.to_qube}:{self.to_port}"
 
-db.create_tables([ForwardRule])
+class FirewallRule(BaseModel):
+    qube = CharField()
+    port = IntegerField()
+    
+    def __str__(self):
+        return f"{self.qube}:{self.port}"
+
+db.create_tables([ForwardRule, FirewallRule])

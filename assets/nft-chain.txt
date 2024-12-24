@@ -1,0 +1,5 @@
+table ip qubes {
+	chain custom-input {
+		ct state established,new tcp dport 80 accept
+	}
+}

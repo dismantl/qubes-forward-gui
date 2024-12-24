@@ -6,4 +6,5 @@ services:
       - ./src:/app/src
       - ./docker:/app/docker
       - ./dist:/app/dist
+      - ./hooks:/app/hooks
     command: "/app/docker/build_pyinstaller.sh"
