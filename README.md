@@ -9,7 +9,7 @@ Qt GUI for simple port forwarding
 
 # Limitations
 - Now only TCP rules supported
-- Now only temporary rules may be created
+- Now only temporary rules could be created
 - Unstable now, may contains some bugs/errors
 
 # Install
