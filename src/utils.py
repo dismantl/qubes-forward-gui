@@ -27,7 +27,7 @@ class Port:
 
 def get_qubes() -> list[Qube]:
     if config.dev:
-        with open('static/qvm-ls.txt', 'r') as f:
+        with open('assets/qvm-ls.txt', 'r') as f:
             text = f.read()
     else:
         config.logger.debug("dom0 executing `qvm-ls`")
@@ -83,7 +83,7 @@ def add_forward_rule(from_qube: str, from_port: int, to_qube: str, to_port: int)
 
 def get_open_ports(qube: str) -> list[Port]:
     if config.dev:
-        with open('static/ss-tlpn.txt', 'r') as f:
+        with open('assets/ss-tlpn.txt', 'r') as f:
             text = f.read()
         config.logger.debug(text)            
     else:
