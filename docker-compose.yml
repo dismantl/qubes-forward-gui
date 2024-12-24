@@ -4,4 +4,4 @@ services:
       context: ./
     volumes:
       - ./:/app
-    command: "/app/docker/buildapp.sh"
+    command: "/app/docker/build_pyinstaller.sh"

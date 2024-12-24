@@ -1,8 +1,11 @@
 import sys
+import os
 import PyQt6.QtWidgets as widgets
 import ui_wrapper
 from config import config
 
+if 'PYTHONHOME' in os.environ:
+    del os.environ['PYTHONHOME']
 
 def main():
     app = widgets.QApplication(sys.argv)
