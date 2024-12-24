@@ -10,16 +10,14 @@ parser.add_argument('-p', '--path', default="/tmp/qubes-forward.db", help="path 
 args = parser.parse_args()
 
 logger.remove()
+
 mylogger = logger
+mylogger.add(sys.stdout, level="DEBUG")
+mylogger.add(sys.stdout, level="WARNING")
+mylogger.add(sys.stdout, level="INFO")
 if args.debug:
-    mylogger.add(sys.stdout, level="DEBUG")
-    mylogger.add(sys.stdout, level="WARNING")
-    mylogger.add(sys.stdout, level="INFO")
     mylogger.add(sys.stdout, level="ERROR")
-else:
-    mylogger.add(sys.stdout, level="WARNING")
-    mylogger.add(sys.stdout, level="INFO")
-    mylogger.add(sys.stdout, level="ERROR")
+
 
 @dataclass
 class Config:

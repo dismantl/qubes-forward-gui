@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Qubes Port Forwarding
+Comment=QT GUI for port forwarding
+Exec=/usr/bin/qubes-forward-gui
+Terminal=false
+Type=Application
