@@ -3,5 +3,7 @@ services:
     build:
       context: ./
     volumes:
-      - ./:/app
+      - ./src:/app/src
+      - ./docker:/app/docker
+      - ./dist:/app/dist
     command: "/app/docker/build_pyinstaller.sh"

@@ -6,7 +6,7 @@ archive_name="qubes-forward-gui"
 
 # clear build shit
 echo "clearing cache"
-sudo rm -rf out/ build/ *.spec src/__pycache__
+sudo rm -rf out/ dist/ $archive_name/ build/ *.spec src/__pycache__
 
 # build the app
 echo "start app building"
@@ -24,4 +24,4 @@ zip "$archive_name.zip" -r "$archive_name"
 
 echo "md5sum binary: $(md5sum $archive_name/main)"
 echo "md5sum archive: $(md5sum $archive_name.zip)"
-sudo rm -rf dist/ "$archive_name/" *.spec src/__pycache__
+sudo rm -rf out/ dist/ $archive_name/ build/ *.spec src/__pycache__
