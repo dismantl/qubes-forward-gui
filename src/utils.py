@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from concurrent.futures import ProcessPoolExecutor
 import database
 import re
+import os
+import sys
 from subprocess import Popen, PIPE
 
 @dataclass
@@ -26,6 +28,8 @@ class Port:
     process: None | int
 
 def get_qubes() -> list[Qube]:
+    if os.environ.get('PYTHONHOME'):
+        del os.environ['PYTHONHOME']
     if config.dev:
         with open('assets/qvm-ls.txt', 'r') as f:
             text = f.read()
@@ -61,6 +65,8 @@ def get_qubes_running() -> list[Qube]:
     return running
 
 def add_forward_rule(from_qube: str, from_port: int, to_qube: str, to_port: int) -> database.ForwardRule:
+    if os.environ.get('PYTHONHOME'):
+        del os.environ['PYTHONHOME']
     rule: database.ForwardRule = database.ForwardRule.create(
         from_qube=from_qube, 
         from_port=from_port, 
@@ -82,6 +88,8 @@ def add_forward_rule(from_qube: str, from_port: int, to_qube: str, to_port: int)
     return rule
 
 def get_open_ports(qube: str) -> list[Port]:
+    if os.environ.get('PYTHONHOME'):
+        del os.environ['PYTHONHOME']
     if config.dev:
         with open('assets/ss-tlpn.txt', 'r') as f:
             text = f.read()
@@ -168,6 +176,8 @@ def get_forward_rules() -> list[database.ForwardRule]:
     return valid_rules
 
 def delete_forward_rule(rule_id: int):
+    if os.environ.get('PYTHONHOME'):
+        del os.environ['PYTHONHOME']
     rule: database.ForwardRule = database.ForwardRule.get_by_id(rule_id)
     if not config.dev:
         config.logger.debug(f"dom0 cmd: qvm-run -u root {rule.to_qube} 'kill {rule.pid}'")
@@ -177,7 +187,6 @@ def delete_forward_rule(rule_id: int):
     rule.delete_instance()
 
 if __name__ == '__main__':
-    import sys
     config.debug = True
     config.dev = True
     config.logger.add(sys.stdout, level="DEBUG")
