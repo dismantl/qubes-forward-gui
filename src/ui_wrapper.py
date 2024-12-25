@@ -30,17 +30,20 @@ class Index:
 
     def on_port_forward_new(self):
         config.logger.debug("port forward new")
+        
         dialog = widgets.QDialog()
         Forward(dialog)
         dialog.exec()
+        
+        # update rules after adding new rule
         self.on_port_forward_refresh()
 
     def on_port_forward_refresh(self):
         config.logger.debug("port forward refresh")
         rules = utils.get_forward_rules()
         self.ui.tableWidget.setRowCount(0)
+        
         for row, rule in enumerate(rules):
-            config.logger.debug(f"rule {rule.id}: {rule.from_qube}:{rule.from_port} => {rule.to_qube}:{rule.to_port}")
             self.ui.tableWidget.insertRow(row)
             
             delete_button = widgets.QPushButton("D")
@@ -72,7 +75,6 @@ class Index:
         
         self.ui.tableWidget_2.setRowCount(0)
         for row, rule in enumerate(rules):
-            config.logger.debug(f"firewall rule {rule.id}: {rule.qube}:{rule.port}")
             self.ui.tableWidget_2.insertRow(row)
             
             delete_button = widgets.QPushButton("D")
