@@ -99,6 +99,7 @@ class Ui_Form(object):
         self.tableWidget_2.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(2, item)
+        self.tableWidget_2.horizontalHeader().setMinimumSectionSize(10)
         self.tableWidget_2.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout_2.addWidget(self.tableWidget_2)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
