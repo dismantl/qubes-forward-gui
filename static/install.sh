@@ -1,6 +1,7 @@
 #!/bin/sh
 echo "remove existing data"
 sudo unlink /usr/bin/qubes-forward-gui &> /dev/null
+sudo rm -rf /tmp/qubes-forward.db 2>/dev/null
 sudo rm -rf /opt/qubes-forward-gui 2>/dev/null
 sudo rm -rf /usr/share/applications/qubes-forward-gui.desktop 2>/dev/null
 
