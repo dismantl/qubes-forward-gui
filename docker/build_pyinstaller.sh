@@ -1,3 +1,3 @@
 #!/bin/sh
 cd /app
-/build/.venv/bin/pyinstaller --clean --onedir --noupx -d noarchive --optimize 2 --strip --bootloader-ignore-signals src/main.py
+/build/.venv/bin/pyinstaller --clean --onedir --hiddenimport pkg_resources._vendor.jaraco.text --noupx -d noarchive src/main.py
