@@ -1,6 +1,8 @@
 import PyQt6.QtWidgets as widgets
 
+from concurrent.futures import ProcessPoolExecutor
 from config import config
+import database
 import pyui.forward
 import pyui.index
 import pyui.firewall
@@ -20,41 +22,39 @@ class Index:
         self.ui.Firewall_Refresh.clicked.connect(self.on_firewall_refresh)
 
         # fix some ui issues
-        # self.ui.textBrowser.setOpenExternalLinks(True)
         self.ui.tableWidget.setColumnWidth(0, 30)
         self.ui.tableWidget_2.setColumnWidth(0, 30)
-
-        # show rules
-        self.on_port_forward_refresh()
-        self.on_firewall_refresh()
+        
+        # get rules, parallel
+        with ProcessPoolExecutor() as executor:
+            firewall_rules, forward_rules = list(executor.map(utils.get_rules, [True, False]))
+            self.__ui_set_firewall_rules(firewall_rules)
+            self.__ui_set_forward_rules(forward_rules)
 
     def on_port_forward_new(self):
         config.logger.debug("port forward new")
-        
         dialog = widgets.QDialog()
         Forward(dialog)
         dialog.exec()
-        
-        # update rules after adding new rule
         self.on_port_forward_refresh()
 
-    def on_port_forward_refresh(self):
-        config.logger.debug("port forward refresh")
-        rules = utils.get_forward_rules()
+    def __ui_set_forward_rules(self, rules: list[database.ForwardRule]):
         self.ui.tableWidget.setRowCount(0)
-        
         for row, rule in enumerate(rules):
             self.ui.tableWidget.insertRow(row)
-            
             delete_button = widgets.QPushButton("D")
             delete_button.clicked.connect(lambda _, row=row, rule_id=rule.id: self.on_port_forward_delete(row, rule_id))
-            
             self.ui.tableWidget.setCellWidget(row, 0, delete_button)
             self.ui.tableWidget.setItem(row, 1, widgets.QTableWidgetItem(rule.from_qube))
             self.ui.tableWidget.setItem(row, 2, widgets.QTableWidgetItem(str(rule.from_port)))
             self.ui.tableWidget.setItem(row, 3, widgets.QTableWidgetItem(rule.to_qube))
             self.ui.tableWidget.setItem(row, 4, widgets.QTableWidgetItem(str(rule.to_port)))
             self.ui.tableWidget.setItem(row, 5, widgets.QTableWidgetItem(str(rule.pid)))
+
+    def on_port_forward_refresh(self):
+        config.logger.debug("port forward refresh")
+        rules = utils.get_forward_rules()
+        self.__ui_set_forward_rules(rules)
 
     def on_port_forward_delete(self, row: int, rule_id: int):
         config.logger.debug(f"delete rule {rule_id}")
@@ -69,20 +69,20 @@ class Index:
         dialog.exec()
         self.on_firewall_refresh()
 
-    def on_firewall_refresh(self):
-        config.logger.debug("firewall refresh")
-        rules = utils.get_firewall_rules()
-        
+    def __ui_set_firewall_rules(self, rules: list[database.FirewallRule]):
         self.ui.tableWidget_2.setRowCount(0)
         for row, rule in enumerate(rules):
             self.ui.tableWidget_2.insertRow(row)
-            
             delete_button = widgets.QPushButton("D")
             delete_button.clicked.connect(lambda _, row=row, rule_id=rule.id: self.on_firewall_rule_delete(row, rule_id))
-            
             self.ui.tableWidget_2.setCellWidget(row, 0, delete_button)
             self.ui.tableWidget_2.setItem(row, 1, widgets.QTableWidgetItem(rule.qube))
             self.ui.tableWidget_2.setItem(row, 2, widgets.QTableWidgetItem(str(rule.port)))
+
+    def on_firewall_refresh(self):
+        config.logger.debug("firewall refresh")
+        rules = utils.get_firewall_rules()
+        self.__ui_set_firewall_rules(rules)
 
     def on_firewall_rule_delete(self, row: int, rule_id: int):
         config.logger.debug(f"delete rule {rule_id}")

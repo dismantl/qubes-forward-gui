@@ -267,6 +267,12 @@ def delete_firewall_rule(rule_id: int):
         ])
     database.FirewallRule.delete().where(database.FirewallRule.qube == rule.qube).execute()
 
+def get_rules(firewall: bool) -> list[database.FirewallRule | database.ForwardRule]:
+    config.logger.debug(f"get_rules, firewall: {firewall}")
+    if firewall:
+        return get_firewall_rules()
+    return get_forward_rules()
+
 if __name__ == '__main__':
     config.debug = True
     config.dev = True
