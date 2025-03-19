@@ -1,7 +1,7 @@
 #!/bin/bash
 uid=$(id -u)
 gid=$(id -g)
-scripts_dir=$(dirname "$0")
+scripts_dir=$(dirname "$0")/scripts
 project_name="qubes-forward-gui"
 
 # clear build shit
@@ -13,8 +13,8 @@ echo "start app building"
 scripts/docker-run.sh
 
 # create archive
-cd "$project_dir"
 echo "creating archive"
+sudo rm -rf $project_name
 rm $project_name.zip &> /dev/null
 sudo cp -r dist/main $project_name
 

@@ -1,4 +1,4 @@
-FROM debian:12
+FROM python:3.10
 
 RUN apt update -y && apt upgrade -y
 RUN apt install -y python3 python3-pip python3-venv gcc pkg-config cmake
